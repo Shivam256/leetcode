@@ -22,7 +22,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
-#include <unordered_map>
 
 using namespace std;
 
@@ -86,6 +85,32 @@ void displayList(ListNode *list)
         list = list->next;
     }
     cout << "\n";
+}
+
+ListNode *createLinkedList(vector<int> v)
+{
+    ListNode *head = new ListNode(v[0]);
+    ListNode *hd = head;
+    for (int i = 1; i < v.size(); i++)
+    {
+        head->next = new ListNode(v[i]);
+        head = head->next;
+    }
+
+    return hd;
+}
+
+void nextPermutation(vector<int> &nums)
+{
+    int i = nums.size()-1,j=i;
+    
+    while(i>0 && nums[i-1] >= nums[i])i--;
+    if(i>0){
+        while(j>0 && nums[i-1] >= nums[j])j--;
+        swap(nums[i-1],nums[j]);
+    }
+    reverse(nums.begin()+i,nums.end());
+
 }
 
 int main()

@@ -22,7 +22,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
-#include <unordered_map>
 
 using namespace std;
 
@@ -88,6 +87,46 @@ void displayList(ListNode *list)
     cout << "\n";
 }
 
+ListNode *createLinkedList(vector<int> v)
+{
+    ListNode *head = new ListNode(v[0]);
+    ListNode *hd = head;
+    for (int i = 1; i < v.size(); i++)
+    {
+        head->next = new ListNode(v[i]);
+        head = head->next;
+    }
+
+    return hd;
+}
+
+void rotate(vector<vector<int>> &matrix)
+{
+    int n = matrix.size() - 1; 
+    int i = 0, j = 0;
+    int p = 0;
+    int ctr = (n + 1) / 2;
+
+    while (ctr--)
+    {
+        i += p;
+        j += p;
+        n -= p;
+        int k = 0;
+
+        while (k < n-p)
+        {
+            int a = matrix[i][j + k];
+            matrix[i][j + k] = matrix[n - k][j];
+            matrix[n - k][j] = matrix[n][n - k];
+            matrix[n][n - k] = matrix[i + k][n];
+            matrix[i + k][n] = a;
+            k++;
+        }
+        p++;
+    }
+}
+
 int main()
 {
     ListNode *l1 = new ListNode(1);
@@ -99,6 +138,14 @@ int main()
     t1->left = new TreeNode(2);
     t1->right->right = new TreeNode(4);
     t1->right->left = new TreeNode(5);
+
+    vector<vector<int>> v = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
+    // vector<vector<int>> v = {{1,2,3},{4,5,6},{7,8,9}};
+    rotate(v);
+    for (auto i : v)
+    {
+        displayVector(i);
+    }
 
     return 0;
 }

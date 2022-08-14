@@ -22,7 +22,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
-#include <unordered_map>
 
 using namespace std;
 
@@ -88,6 +87,62 @@ void displayList(ListNode *list)
     cout << "\n";
 }
 
+ListNode *createLinkedList(vector<int> v)
+{
+    ListNode *head = new ListNode(v[0]);
+    ListNode *hd = head;
+    for (int i = 1; i < v.size(); i++)
+    {
+        head->next = new ListNode(v[i]);
+        head = head->next;
+    }
+
+    return hd;
+}
+
+int myAtoi(string s)
+{
+    string t;
+    bool isNegative = false;
+
+    for (auto i : s)
+    {
+        int x = i;
+        if (x >= 48 && x <= 57)
+        {
+            t += i;
+        }
+        else if (i == '-')
+        {
+            isNegative = true;
+        }
+        else if (i == ' ')
+        {
+            continue;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    int result = 0;
+    int k = 1;
+
+    for (int i = t.size() - 1; i >= 0; i--)
+    {
+        int r = t[i] - '0';
+        result += r * k;
+        k *= 10;
+    }
+
+    if (isNegative)
+    {
+        return -(result);
+    }
+    return result;
+}
+
 int main()
 {
     ListNode *l1 = new ListNode(1);
@@ -99,6 +154,11 @@ int main()
     t1->left = new TreeNode(2);
     t1->right->right = new TreeNode(4);
     t1->right->left = new TreeNode(5);
+
+    string s = "words and 987";
+    int x = myAtoi(s);
+
+    cout << x << "\n";
 
     return 0;
 }
