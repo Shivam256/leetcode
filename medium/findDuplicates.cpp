@@ -100,29 +100,21 @@ ListNode *createLinkedList(vector<int> v)
     return hd;
 }
 
-void rotate(vector<vector<int>> &matrix)
+int findDuplicate(vector<int> &nums)
 {
-    int n = matrix.size();
-    int m = matrix[0].size();
-    // transpose matrix
-    for (int i = 0; i < n; i++)
+
+    for (int i = 0; i < nums.size(); i++)
     {
-        for (int j = i; j < m; j++)
+        if (nums[abs(nums[i]) - 1] < 0)
+            return abs(nums[i]);
+        else
         {
-            int temp = matrix[i][j];
-            matrix[i][j] = matrix[j][i];
-            matrix[j][i] = temp;
+            nums[abs(nums[i]) - 1] *= -1;
         }
     }
 
-    // //reverse the transpose
-    for(int i=0;i<n;i++){
-        int k = m-1;
-        for(int j=0; j<m/2;j++){
-            swap(matrix[i][j],matrix[i][k--]);
-        }
-    }
-}
+    return 0;
+}s
 
 int main()
 {
@@ -135,14 +127,6 @@ int main()
     t1->left = new TreeNode(2);
     t1->right->right = new TreeNode(4);
     t1->right->left = new TreeNode(5);
-
-    vector<vector<int>> v = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
-    // vector<vector<int>> v = {{1,2,3},{4,5,6},{7,8,9}};
-    rotate(v);
-    for (auto i : v)
-    {
-        displayVector(i);
-    }
 
     return 0;
 }

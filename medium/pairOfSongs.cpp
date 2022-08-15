@@ -100,28 +100,24 @@ ListNode *createLinkedList(vector<int> v)
     return hd;
 }
 
-void rotate(vector<vector<int>> &matrix)
+int numPairsDivisibleBy60(vector<int> &time)
 {
-    int n = matrix.size();
-    int m = matrix[0].size();
-    // transpose matrix
-    for (int i = 0; i < n; i++)
+    unordered_map<int, int> mapper;
+    int res = 0;
+
+    for (int i = 0; i < time.size(); i++)
     {
-        for (int j = i; j < m; j++)
+        int r = time[i] % 60;
+        if (mapper.find(60 - r) != mapper.end())
         {
-            int temp = matrix[i][j];
-            matrix[i][j] = matrix[j][i];
-            matrix[j][i] = temp;
+            res += mapper[60 - r];
         }
+        if (r == 0)
+            r = 60;
+        mapper[r]++;
     }
 
-    // //reverse the transpose
-    for(int i=0;i<n;i++){
-        int k = m-1;
-        for(int j=0; j<m/2;j++){
-            swap(matrix[i][j],matrix[i][k--]);
-        }
-    }
+    return res;
 }
 
 int main()
@@ -136,13 +132,9 @@ int main()
     t1->right->right = new TreeNode(4);
     t1->right->left = new TreeNode(5);
 
-    vector<vector<int>> v = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
-    // vector<vector<int>> v = {{1,2,3},{4,5,6},{7,8,9}};
-    rotate(v);
-    for (auto i : v)
-    {
-        displayVector(i);
-    }
+    vector<int> tm = {30,20,150,100,40};
+    int res = numPairsDivisibleBy60(tm);
+    cout << res << "\n";
 
     return 0;
 }

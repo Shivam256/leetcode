@@ -100,26 +100,58 @@ ListNode *createLinkedList(vector<int> v)
     return hd;
 }
 
-void rotate(vector<vector<int>> &matrix)
+int getNeighborCount(vector<vector<int>> &board, int row, int col)
 {
-    int n = matrix.size();
-    int m = matrix[0].size();
-    // transpose matrix
-    for (int i = 0; i < n; i++)
+    int total = 0;
+    vector<vector<int>> neighbours = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
+
+    for (auto i : neighbours)
     {
-        for (int j = i; j < m; j++)
+        int nr = row + i[0];
+        int nc = col + i[1];
+
+        if (nr >= 0 && nc >= 0 && nr < board.size() && nc < board[0].size())
         {
-            int temp = matrix[i][j];
-            matrix[i][j] = matrix[j][i];
-            matrix[j][i] = temp;
+            total += board[nr][nc];
         }
     }
 
-    // //reverse the transpose
-    for(int i=0;i<n;i++){
-        int k = m-1;
-        for(int j=0; j<m/2;j++){
-            swap(matrix[i][j],matrix[i][k--]);
+    return total;
+}
+
+void gameOfLife(vector<vector<int>> &board)
+{
+    int m = board.size();
+    int n = board[0].size();
+    vector<vector<int>> invert;
+
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            int v = getNeighborCount(board, i, j);
+            if (board[i][j] == 0 && v == 3)
+            {
+                invert.push_back({i, j});
+            }
+            else if (board[i][j] == 1 && (v < 2 || v > 3))
+            {
+                invert.push_back({i, j});
+            }
+        }
+    }
+
+    for (auto i : invert)
+    {
+        int r = i[0];
+        int c = i[1];
+        if (board[r][c] == 0)
+        {
+            board[r][c] = 1;
+        }
+        else
+        {
+            board[r][c] = 0;
         }
     }
 }
@@ -136,11 +168,9 @@ int main()
     t1->right->right = new TreeNode(4);
     t1->right->left = new TreeNode(5);
 
-    vector<vector<int>> v = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
-    // vector<vector<int>> v = {{1,2,3},{4,5,6},{7,8,9}};
-    rotate(v);
-    for (auto i : v)
-    {
+    vector<vector<int>> v = {{0,1,0},{0,0,1},{1,1,1},{0,0,0}};
+    gameOfLife(v);
+    for(auto i:v){
         displayVector(i);
     }
 

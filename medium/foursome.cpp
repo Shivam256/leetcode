@@ -87,6 +87,63 @@ void displayList(ListNode *list)
     cout << "\n";
 }
 
+vector<vector<int>> fourSum(vector<int> &nums, int target)
+{
+    vector<vector<int>> res;
+
+    sort(nums.begin(), nums.end());
+    int n = nums.size();
+
+    for (int i = 0; i < n; i++)
+    {
+        if (i > 0 && nums[i - 1] == nums[i])
+        {
+            continue;
+        }
+        for (int j = i + 1; j < n; j++)
+        {
+            if (j != i + 1 && nums[j - 1] == nums[j])
+            {
+                continue;
+            }
+
+            int start = j + 1;
+            int end = n - 1;
+            long current = nums[i] + nums[j];
+
+            while (start < end)
+            {
+                int p = nums[start] + nums[end];
+                if (p < (long)target - current)
+                {
+                    while (start < end && nums[start] == nums[start + 1])
+                        start++;
+                    start++;
+                }
+                else if (p > (long)target - current)
+                {
+                    while (start < end && nums[end] == nums[end - 1])
+                        end--;
+                    end--;
+                }
+                else
+                {
+                    res.push_back({nums[i], nums[j], nums[start], nums[end]});
+                    while (start < end && nums[start] == nums[start + 1])
+                        start++;
+                    while (start < end && nums[end] == nums[end - 1])
+                        end--;
+                    start++;
+                    end--;
+                }
+            }
+        }
+    }
+
+
+    return res;
+}
+
 ListNode *createLinkedList(vector<int> v)
 {
     ListNode *head = new ListNode(v[0]);
@@ -100,30 +157,6 @@ ListNode *createLinkedList(vector<int> v)
     return hd;
 }
 
-void rotate(vector<vector<int>> &matrix)
-{
-    int n = matrix.size();
-    int m = matrix[0].size();
-    // transpose matrix
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = i; j < m; j++)
-        {
-            int temp = matrix[i][j];
-            matrix[i][j] = matrix[j][i];
-            matrix[j][i] = temp;
-        }
-    }
-
-    // //reverse the transpose
-    for(int i=0;i<n;i++){
-        int k = m-1;
-        for(int j=0; j<m/2;j++){
-            swap(matrix[i][j],matrix[i][k--]);
-        }
-    }
-}
-
 int main()
 {
     ListNode *l1 = new ListNode(1);
@@ -135,14 +168,6 @@ int main()
     t1->left = new TreeNode(2);
     t1->right->right = new TreeNode(4);
     t1->right->left = new TreeNode(5);
-
-    vector<vector<int>> v = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
-    // vector<vector<int>> v = {{1,2,3},{4,5,6},{7,8,9}};
-    rotate(v);
-    for (auto i : v)
-    {
-        displayVector(i);
-    }
 
     return 0;
 }

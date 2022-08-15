@@ -22,6 +22,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <unordered_map>
 
 using namespace std;
 
@@ -87,41 +88,23 @@ void displayList(ListNode *list)
     cout << "\n";
 }
 
-ListNode *createLinkedList(vector<int> v)
+bool containsNearbyDuplicate(vector<int> &nums, int k)
 {
-    ListNode *head = new ListNode(v[0]);
-    ListNode *hd = head;
-    for (int i = 1; i < v.size(); i++)
-    {
-        head->next = new ListNode(v[i]);
-        head = head->next;
-    }
+    unordered_map<int, int> mapper;
 
-    return hd;
-}
-
-void rotate(vector<vector<int>> &matrix)
-{
-    int n = matrix.size();
-    int m = matrix[0].size();
-    // transpose matrix
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < nums.size(); i++)
     {
-        for (int j = i; j < m; j++)
+        if (mapper.find(nums[i]) != mapper.end())
         {
-            int temp = matrix[i][j];
-            matrix[i][j] = matrix[j][i];
-            matrix[j][i] = temp;
+            if (abs(i - mapper[nums[i]]) <= k)
+            {
+                return true;
+            }
         }
+        mapper[nums[i]] = i;
     }
 
-    // //reverse the transpose
-    for(int i=0;i<n;i++){
-        int k = m-1;
-        for(int j=0; j<m/2;j++){
-            swap(matrix[i][j],matrix[i][k--]);
-        }
-    }
+    return false;
 }
 
 int main()
@@ -135,14 +118,6 @@ int main()
     t1->left = new TreeNode(2);
     t1->right->right = new TreeNode(4);
     t1->right->left = new TreeNode(5);
-
-    vector<vector<int>> v = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
-    // vector<vector<int>> v = {{1,2,3},{4,5,6},{7,8,9}};
-    rotate(v);
-    for (auto i : v)
-    {
-        displayVector(i);
-    }
 
     return 0;
 }

@@ -100,28 +100,54 @@ ListNode *createLinkedList(vector<int> v)
     return hd;
 }
 
-void rotate(vector<vector<int>> &matrix)
+int threeSumClosest(vector<int> &nums, int target)
 {
-    int n = matrix.size();
-    int m = matrix[0].size();
-    // transpose matrix
-    for (int i = 0; i < n; i++)
+    sort(nums.begin(), nums.end());
+    int resultSum = 0;
+    int currentDifference = INT32_MAX;
+
+    for (int i = 0; i < nums.size(); i++)
     {
-        for (int j = i; j < m; j++)
+        int current = nums[i];
+        int currentTargetSum = target - current;
+        if (current > target)
+            break;
+
+        int start = i + 1, end = nums.size() - 1;
+
+        while (start < end)
         {
-            int temp = matrix[i][j];
-            matrix[i][j] = matrix[j][i];
-            matrix[j][i] = temp;
+            int p = nums[start] + nums[end];
+            if (p == currentTargetSum)
+            {
+                currentDifference = 0;
+                resultSum = target;
+                break;
+            }
+            else if (p > currentTargetSum)
+            {
+                int s = p + current;
+                if (abs(s - target) <= currentDifference)
+                {
+                    currentDifference = abs(s - target);
+                    resultSum = s;
+                }
+                end--;
+            }
+            else if (p < currentTargetSum)
+            {
+                int s = p + current;
+                if (abs(s - target) <= currentDifference)
+                {
+                    currentDifference = abs(s - target);
+                    resultSum = s;
+                }
+                start++;
+            }
         }
     }
 
-    // //reverse the transpose
-    for(int i=0;i<n;i++){
-        int k = m-1;
-        for(int j=0; j<m/2;j++){
-            swap(matrix[i][j],matrix[i][k--]);
-        }
-    }
+    return resultSum;
 }
 
 int main()
@@ -136,13 +162,10 @@ int main()
     t1->right->right = new TreeNode(4);
     t1->right->left = new TreeNode(5);
 
-    vector<vector<int>> v = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
-    // vector<vector<int>> v = {{1,2,3},{4,5,6},{7,8,9}};
-    rotate(v);
-    for (auto i : v)
-    {
-        displayVector(i);
-    }
+
+    vector<int> v = {0,0,0};
+    int res = threeSumClosest(v,1);
+    cout<<res<<"\n";
 
     return 0;
 }
