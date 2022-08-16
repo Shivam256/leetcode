@@ -100,20 +100,17 @@ ListNode *createLinkedList(vector<int> v)
     return hd;
 }
 
-int findDuplicate(vector<int> &nums)
+bool canJump(vector<int> &nums)
 {
-
-    for (int i = 0; i < nums.size(); i++)
+    int ctr = 0;
+    for (int i = 0; i <= ctr; i++)
     {
-        if (nums[abs(nums[i]) - 1] < 0)
-            return abs(nums[i]);
-        else
-        {
-            nums[abs(nums[i]) - 1] *= -1;
-        }
+        if (i + nums[i] >= nums.size() - 1)
+            return true;
+        ctr = max(ctr, i + nums[i]);
     }
 
-    return 0;
+    return false;
 }
 
 int main()

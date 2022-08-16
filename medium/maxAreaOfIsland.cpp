@@ -100,20 +100,64 @@ ListNode *createLinkedList(vector<int> v)
     return hd;
 }
 
-int findDuplicate(vector<int> &nums)
+int getArea(vector<vector<int>> &grid, int row, int col)
 {
+    int area = 0;
+    int m = grid.size();
+    int n = grid[0].size();
+    vector<pair<int, int>> directions = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+    queue<pair<int, int>> q;
+    q.push({row, col});
+    grid[row][col] = '-1';
+    area++;
 
-    for (int i = 0; i < nums.size(); i++)
+    while (q.empty() == false)
     {
-        if (nums[abs(nums[i]) - 1] < 0)
-            return abs(nums[i]);
-        else
+        pair<int, int> tp = q.front();
+        q.pop();
+
+        int cx = tp.first, cy = tp.second;
+
+        for (int i = 0; i < 4; i++)
         {
-            nums[abs(nums[i]) - 1] *= -1;
+            int dx = directions[i].first;
+            int dy = directions[i].second;
+
+            if (cx + dx < m && cx + dx >= 0 && cy + dy < n && cy + dy >= 0)
+            {
+                if (grid[cx + dx][cy + dy] == 1)
+                {
+                    pair<int, int> np = {cx + dx, cy + dy};
+                    q.push(np);
+                    grid[cx + dx][cy + dy] = -1;
+                    area++;
+                }
+            }
         }
     }
 
-    return 0;
+    return area;
+}
+
+int maxAreaOfIsland(vector<vector<int>> &grid)
+{
+    int m = grid.size();
+    int n = grid[0].size();
+    int maxArea = 0;
+
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (grid[i][j] == 1)
+            {
+                int area = getArea(grid, i, j);
+                maxArea = max(maxArea, area);
+            }
+        }
+    }
+
+    return maxArea;
 }
 
 int main()

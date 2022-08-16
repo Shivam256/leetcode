@@ -100,20 +100,44 @@ ListNode *createLinkedList(vector<int> v)
     return hd;
 }
 
-int findDuplicate(vector<int> &nums)
+int maxArea(int h, int w, vector<int> &horizontalCuts, vector<int> &verticalCuts)
 {
+    long long int maxWidth = 0;
+    long long int maxHeight = 0;
+    long long int currentWidth = 0;
+    long long int currentHeight = 0;
+    const unsigned int M = 1000000007;
 
-    for (int i = 0; i < nums.size(); i++)
+    sort(horizontalCuts.begin(), horizontalCuts.end());
+    sort(verticalCuts.begin(), verticalCuts.end());
+
+    for (int i = 0; i < verticalCuts.size(); i++)
     {
-        if (nums[abs(nums[i]) - 1] < 0)
-            return abs(nums[i]);
-        else
+        if (maxWidth < verticalCuts[i] - currentWidth)
         {
-            nums[abs(nums[i]) - 1] *= -1;
+            maxWidth = verticalCuts[i] - currentWidth;
         }
+        currentWidth = verticalCuts[i];
+    }
+    if (maxWidth < w - verticalCuts[verticalCuts.size() - 1])
+    {
+        maxWidth = w - verticalCuts[verticalCuts.size() - 1];
     }
 
-    return 0;
+    for (int i = 0; i < horizontalCuts.size(); i++)
+    {
+        if (maxHeight < horizontalCuts[i] - currentHeight)
+        {
+            maxHeight = horizontalCuts[i] - currentHeight;
+        }
+        currentHeight = horizontalCuts[i];
+    }
+    if (maxHeight < h - horizontalCuts[horizontalCuts.size() - 1])
+    {
+        maxHeight = h - horizontalCuts[horizontalCuts.size() - 1];
+    }
+
+    return (maxWidth * maxHeight) % M;
 }
 
 int main()
@@ -128,5 +152,12 @@ int main()
     t1->right->right = new TreeNode(4);
     t1->right->left = new TreeNode(5);
 
+    vector<int> hr = {3};
+    vector<int> vr = {3};
+
+    int res = maxArea(5, 4, hr, vr);
+    cout << res << "\n";
+
     return 0;
 }
+maxWidth = max(maxWidth, verticalCuts[i] - currentWidth);

@@ -100,20 +100,28 @@ ListNode *createLinkedList(vector<int> v)
     return hd;
 }
 
-int findDuplicate(vector<int> &nums)
+vector<int> arrayChange(vector<int> &nums, vector<vector<int>> &operations)
 {
+    map<int, int> mp;
+    
+    for(int i=0; i<nums.size(); i++){
+        mp[nums[i]] = i;
+    }
 
-    for (int i = 0; i < nums.size(); i++)
-    {
-        if (nums[abs(nums[i]) - 1] < 0)
-            return abs(nums[i]);
-        else
-        {
-            nums[abs(nums[i]) - 1] *= -1;
+    for(auto i : operations){
+        int idx = mp[i[0]];
+        mp[i[0]] = -1;
+        mp[i[1]] = idx;
+    }
+
+    vector<int> res(nums.size(),0);
+    for(auto i:mp){
+        if(i.second >= 0){
+            res[i.second] = i.first;
         }
     }
 
-    return 0;
+    return res;
 }
 
 int main()
@@ -127,6 +135,12 @@ int main()
     t1->left = new TreeNode(2);
     t1->right->right = new TreeNode(4);
     t1->right->left = new TreeNode(5);
+
+    vector<int> v = {1, 2, 4, 6};
+    vector<vector<int>> m = {{1, 3}, {4, 7}, {6, 1}};
+
+    vector<int> res = arrayChange(v, m);
+    displayVector(res);
 
     return 0;
 }

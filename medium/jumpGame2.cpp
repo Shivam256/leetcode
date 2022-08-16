@@ -100,20 +100,32 @@ ListNode *createLinkedList(vector<int> v)
     return hd;
 }
 
-int findDuplicate(vector<int> &nums)
+int jump(vector<int> &nums)
 {
+    int n = nums.size();
+    vector<int> steps(n, 0);
 
-    for (int i = 0; i < nums.size(); i++)
+    for (int i = 0; i < n; i++)
     {
-        if (nums[abs(nums[i]) - 1] < 0)
-            return abs(nums[i]);
-        else
+        int jumps = nums[i];
+        int j = i + 1;
+        while (jumps-- && j < n)
         {
-            nums[abs(nums[i]) - 1] *= -1;
+            int k = steps[i] + 1;
+            if (steps[j] != 0)
+            {
+                steps[j] = min(steps[j], k);
+            }
+            else
+            {
+                steps[j] = k;
+            }
+
+            j++;
         }
     }
 
-    return 0;
+    return steps[n - 1];
 }
 
 int main()
@@ -127,6 +139,10 @@ int main()
     t1->left = new TreeNode(2);
     t1->right->right = new TreeNode(4);
     t1->right->left = new TreeNode(5);
+
+    vector<int> v = {2, 3, 0, 1, 4};
+    int res = jump(v);
+    cout << res << "\n";
 
     return 0;
 }
